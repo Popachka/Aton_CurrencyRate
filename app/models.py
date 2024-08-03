@@ -17,5 +17,5 @@ class Country(Base):
     __tablename__ = 'countries'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
-    currency_code = Column(String, ForeignKey('currencies.code'))
+    currency_id = Column(Integer, ForeignKey('currencies.id'))
     currency = relationship('Currency', back_populates='countries')

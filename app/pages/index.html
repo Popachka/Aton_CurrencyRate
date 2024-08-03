@@ -1,24 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>FastAPI with HTML</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <style>
+        /* Сделаем селект выше по вертикали */
+        .form-select {
+            height: 200px; /* Высота для отображения большего числа элементов */
+            overflow-y: auto; /* Прокрутка при необходимости */
+        }
+    </style>
+    <title>Форма выбора</title>
 </head>
 <body>
-    <h1>Скачать всю информацию о курсах валют:</h1>
-    <p>Вы можете выбрать диапазон дат в пределах 2-ух лет</p>
-    <form action="/api/upload" method="post">
-        <!-- <label for="start_date">Дата начала:</label> -->
-        <!-- <input type="date" id="start_date" name="start_date" required> -->
-    
-        <!-- <label for="end_date">Дата окончания:</label> -->
-        <!-- <input type="date" id="end_date" name="end_date" required> -->
+    <div class="container mt-5">
+        <h1 class="mb-4">Выберите диапазон дат и страны</h1>
+        
+        <!-- Форма для обновления данных -->
+        <div class="mb-4">
+            <form action="/api/upload" method="post">
+                <button type="submit" class="btn btn-warning">Обновить данные</button>
+            </form>
+        </div>
 
-        <button type="submit">Скачать</button>
-    </form>
+        <!-- Основная форма -->
+        <form action="/api/selectRate" method="post">
+            <div class="mb-3 form-floating">
+                <input type="date" id="start_date" name="start_date" class="form-control" placeholder="Дата начала" value="2024-01-01" required>
+                <label for="start_date">Дата начала:</label>
+                <div id="start_date_help" class="form-text">Выберите дату начала периода.</div>
+            </div>
 
-    <p class="message">
-        {{message}}
-    </p>
+            <div class="mb-3 form-floating">
+                <input type="date" id="end_date" name="end_date" class="form-control" placeholder="Дата окончания" value="2024-12-31" required>
+                <label for="end_date">Дата окончания:</label>
+                <div id="end_date_help" class="form-text">Выберите дату окончания периода.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="currency_ids" class="form-label">Выберите страны:</label>
+                <select id="currency_ids" name="currency_ids" class="form-select" multiple required>
+                    {% for country in countries %}
+                        <option value="{{ country.id }}">{{ country.name }}</option>
+                    {% endfor %}
+                </select>
+                <div id="currency_ids_help" class="form-text">Выберите несколько стран (удерживайте Ctrl для выбора нескольких).</div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">Отправить</button>
+                <button type="reset" class="btn btn-secondary">Сбросить</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Подключение JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

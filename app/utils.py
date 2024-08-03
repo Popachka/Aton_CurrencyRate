@@ -1,10 +1,10 @@
-from typing import Optional
+from typing import Optional, List
 import httpx
 from bs4 import BeautifulSoup
 from .config import logger
 import re
 from app.structure_data.cache import Cache
-
+from app.config import settings
 
 async def fetch_html(url: str) -> Optional[str]:
     """Получение HTML-страницы по URL"""
@@ -49,6 +49,8 @@ def parse_currency_page(html: str, cache: Cache) -> None:
         matches = re.findall(r'<td>(.*?)<\/td>', tr)
         if matches and len(matches) == 4:
             country_name, currency_name, code, number = matches
+            if number not in settings.countries_numbers_to_currencies:
+                continue
             if code not in seen_codes:
                 currency = {
                     'name': currency_name,
@@ -84,3 +86,19 @@ def parse_currency_page(html: str, cache: Cache) -> None:
     
 
     return new_currencies, new_countries
+
+def convert_number_to_id(currency_numbers: List[str]) -> List[str]:
+    print(currency_numbers)
+    numbers = set(currency_numbers)
+    numbers_to_id_dict = settings.countries_numbers_to_currencies
+    ids = [numbers_to_id_dict[number] for number in numbers if number in numbers_to_id_dict]
+    if len(ids) == 0:
+        raise 
+    return ids
+def generate_urls(ids: List[str], suffix_url_date: str) -> List[str]:
+    urls = []
+    for id_from_site in ids:
+        s = ''
+        s += f"id=10148&pv=1&cur={id_from_site}" + suffix_url_date
+        urls.append(s)
+    return urls

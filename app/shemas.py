@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+
 class CurrencyBase(BaseModel):
     name: str
     code: str
@@ -6,6 +7,7 @@ class CurrencyBase(BaseModel):
 
 class CurrencyCreate(CurrencyBase):
     pass
+
 class Currency(CurrencyBase):
     id: int
     class Config:
@@ -13,4 +15,12 @@ class Currency(CurrencyBase):
 
 class CountryBase(BaseModel):
     name: str
-    currency_code: CurrencyBase
+    currency_code: str  
+
+class CountryCreate(CountryBase):
+    pass
+
+class Country(CountryBase):
+    id: int
+    class Config:
+        orm_mode = True

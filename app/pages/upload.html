@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FastAPI with HTML</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+</head>
+<body>
+    <h1>Скачать всю информацию о курсах валют:</h1>
+    <p>Вы можете выбрать диапазон дат в пределах 2-ух лет</p>
+    <form action="/api/upload" method="post">
+        <!-- <label for="start_date">Дата начала:</label> -->
+        <!-- <input type="date" id="start_date" name="start_date" required> -->
+    
+        <!-- <label for="end_date">Дата окончания:</label> -->
+        <!-- <input type="date" id="end_date" name="end_date" required> -->
+
+        <button type="submit">Скачать</button>
+    </form>
+
+    <p class="message">
+        {{message}}
+    </p>
+</body>
+</html>
