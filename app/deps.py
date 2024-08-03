@@ -1,7 +1,9 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends
 import httpx
-from .config import logger, URL_LIST_OF_CURRENCY, URL_RATES  
-
+from .config import logger, settings
+from .db import SessionLocal, init_db
+from typing import Annotated
+from sqlalchemy.orm import Session
 async def check_url_availability(url: str) -> None:
     async with httpx.AsyncClient() as client:
         try:
@@ -18,6 +20,15 @@ async def check_url_availability(url: str) -> None:
 
 async def check_urls() -> None:
     logger.info('Начало проверки URL-ов')
-    await check_url_availability(URL_LIST_OF_CURRENCY)
-    await check_url_availability(URL_RATES)
+    await check_url_availability(settings.URL_LIST_OF_CURRENCY)
+    await check_url_availability(settings.URL_RATES)
     logger.info('Проверка URL-ов завершена')
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+SessionDep = Annotated[Session, Depends(get_db)]
